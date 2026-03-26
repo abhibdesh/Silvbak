@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"silvbak/internal/config"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -12,29 +13,26 @@ import (
 
 func main() {
 	// load config
-	// init DB
-	// init services
-	// start server
+	mongoConfig := config.Load()
 	client, err := mongo.Connect(
-		options.Client().ApplyURI("DB_LINK"),
+		options.Client().ApplyURI(mongoConfig.MongoURI),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// ping to verify connection
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err = client.Ping(ctx, nil)
-	if err != nil {
+	if err = client.Ping(ctx, nil); err != nil {
 		log.Fatal("Mongo not connected:", err)
 	}
 
-	fmt.Println("Mongo connected ✅")
-
-	db := client.Database("silvbak")
+	fmt.Println("Mongo connected")
+	db := client.Database(mongoConfig.DBName)
 	fmt.Println("Using DB:", db.Name())
-	fmt.Println("sdf", client)
-	fmt.Println("sdf", err)
+	// init DB
+	// init services
+	// start server
+
 }
