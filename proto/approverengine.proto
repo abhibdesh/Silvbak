@@ -1,0 +1,17 @@
+syntax="proto3";
+
+package Silvbak;
+
+option go_package = "proto/gen/approver";
+
+service ApproverEngine {
+    rpc ApproveRecord(ApprovalData) returns (ApprovalResponse);
+}
+
+message ApproveRecord {
+    string data =1;
+}
+
+message ApprovalResponse {
+    string response = 1;
+}
