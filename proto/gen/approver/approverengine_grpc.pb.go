@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ApproverEngine_ApproveRecord_FullMethodName = "/Silvbak.ApproverEngine/ApproveRecord"
+	ApproverEngine_ApproveRecord_FullMethodName = "/silvbak.approver.ApproverEngine/ApproveRecord"
 )
 
 // ApproverEngineClient is the client API for ApproverEngine service.
@@ -108,7 +108,7 @@ func _ApproverEngine_ApproveRecord_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ApproverEngine_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Silvbak.ApproverEngine",
+	ServiceName: "silvbak.approver.ApproverEngine",
 	HandlerType: (*ApproverEngineServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

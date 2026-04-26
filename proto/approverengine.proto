@@ -1,15 +1,76 @@
 syntax = "proto3";
-package Silvbak;
+
+package silvbak.approver;
+
 option go_package = "proto/gen/approver";
 
 service ApproverEngine {
     rpc ApproveRecord(ApprovalRequest) returns (ApprovalResponse);
 }
 
-message ApprovalRequest {   // cleaner than reusing the rpc name
-    string data = 1;
+message ApprovalRequest {
+    string tenant_id = 1;
+    string approver_id = 2;
+
+    ApprovalPayload payload = 3;
+
+    string idempotency_key = 4;
+}
+
+message ApprovalPayload {
+    // What exactly is being approved?
+    string subject_id = 1;
+
+    // Result (APPROVED, VERIFIED, REJECTED, etc.)
+    string action = 2;
+
+    // Client-provided timestamp (NOT trusted for hashing)
+    int64 client_timestamp = 3;
+
+    DeviceInfo device = 4;
+
+    GeoInfo geo = 5;
+
+    // Flexible extension
+    // MUST be canonicalized before signing
+    map<string, string> metadata = 6;
+}
+
+message DeviceInfo {
+    string browser = 1;
+    string os_info = 2;
+    string device_type = 3;
+    string screen_resolution = 4;
+    string language = 5;
+    string timezone = 6;
+}
+
+message GeoInfo {
+    string ip = 1;
+    string location = 2;
+}
+
+enum Status {
+    UNKNOWN = 0;
+    SUCCESS = 1;
+    DUPLICATE = 2;
+    FAILED = 3;
 }
 
 message ApprovalResponse {
-    string response = 1;
+    string global_hash = 1;
+    int64 global_seq = 2;
+
+    string admin_hash = 3;
+    int64 admin_seq = 4;
+
+    string admin_signature = 5;
+    string system_signature = 6;
+
+    string signer_public_key = 7;
+    string system_public_key = 8;
+
+    Status status = 9;
+
+    string error = 10;
 }
