@@ -1,2 +1,1 @@
-// grpc.go
 package handler
